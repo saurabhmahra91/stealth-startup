@@ -1,0 +1,57 @@
+import json
+import os
+import sys
+
+from crewai import CrewOutput
+
+from memory import valkey_client
+
+sys.path.append(os.path.abspath(os.environ["NEURON_PACKAGE_ROOT_DIR"]))
+from neuron.crew import Neuron
+
+
+def run_for_user(user_id, user_input):
+    history = get_chat_history(user_id)
+
+    history.append({"user": user_input})
+
+    inputs = {"user_message": user_input, "conversation_history": history}
+    print("############################")
+    print("This input was sent to the crew \n\n\n\n")
+    print(inputs)
+
+    result: CrewOutput = Neuron().crew().kickoff(inputs=inputs)
+
+    parsed_results = json.loads(result.raw)
+
+    justification = parsed_results["justification"]
+    sql_query = parsed_results["sql_query"]
+    follow_up = parsed_results["follow_up_question"]
+
+    history.append({"manager": {"justification": justification, "sql_query": sql_query, "follow_up": follow_up}})
+    save_chat_history(user_id, history)
+
+    return {"sql_query": sql_query, "justification": justification, "follow_up": follow_up}
+
+
+def get_chat_history(user_id):
+    key = user_id
+
+    if valkey_client.exists(key):
+        res = valkey_client.get(key)
+        return json.loads(res)
+    else:
+        return []
+
+
+def save_chat_history(user_id, history):
+    key = user_id
+    valkey_client.set(key, json.dumps(history), ex=60 * 60 * 24)
+
+
+def user_exists(user_id):
+    return valkey_client.exists(f"{user_id}") == 1
+
+
+def flush_user_memory(user_id):
+    valkey_client.delete(f"{user_id}")

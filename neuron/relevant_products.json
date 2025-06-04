@@ -1,0 +1,12 @@
+{
+  "follow_up_question": "What specific type of beauty product are you looking for (e.g., skincare, makeup, haircare)?",
+  "sql_query": "SELECT * FROM beauty_products;",
+  "justification": "This query retrieves all beauty products, providing a comprehensive overview to help identify what might best meet your needs. Previous customers have praised the variety available, making it easier to find popular and effective products.",
+  "sample_products": [
+    {"SKU": "BP001", "Product Name": "Revitalizing Face Serum", "Price": 29.99, "Category": "Serums"},
+    {"SKU": "BP002", "Product Name": "Nourishing Body Lotion", "Price": 24.99, "Category": "Body Care"},
+    {"SKU": "BP003", "Product Name": "Color Stay Lipstick", "Price": 19.99, "Category": "Makeup"},
+    {"SKU": "BP004", "Product Name": "Hydrating Eye Cream", "Price": 34.99, "Category": "Skincare"},
+    {"SKU": "BP005", "Product Name": "Daily Sunscreen SPF 50", "Price": 29.99, "Category": "Sun Care"}
+  ]
+}

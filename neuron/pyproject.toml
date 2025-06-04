@@ -1,0 +1,23 @@
+[project]
+name = "neuron"
+version = "0.1.0"
+description = "neuron using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "crewai[tools]>=0.121.1,<1.0.0"
+]
+
+[project.scripts]
+neuron = "neuron.main:run"
+run_crew = "neuron.main:run"
+train = "neuron.main:train"
+replay = "neuron.main:replay"
+test = "neuron.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
