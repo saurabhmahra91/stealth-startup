@@ -3,7 +3,7 @@ import SearchBar from '../components/SearchBar'
 import ProductList from '../components/ProductList'
 import JustificationFooter from '../components/JustificationFooter'
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL;
 // const API_URL = 'http://localhost:8000' // Ensure this matches your backend
 
 export default function HomePage() {
