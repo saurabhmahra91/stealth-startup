@@ -20,35 +20,63 @@ prepare_sql_for_relevant_products:
     before running any other query.
   
   expected_output: >
+    Three things -- 
     1. The SQL query that you used to get the product list (with the limits removed)
     2. Reasoning behind why this particular SQL query (product set) was decided
     3. Some sample products fetched by running the generated SQL query with a small limit
   
   agent: product_matcher
+  tools:
+    - run_sql_query_on_beauty_products_table
+    - get_product_table_schema
 
 
 find_simialr_user_reviews:
   description: >
-    Review the context you got and expand each topic into a full section for a report.
-    Make sure the report is detailed and contains any and all relevant information.
+    Read a user query for obtaining products and search for similar instances in the user_reviews database. If
+    there are reviews which have attributes similar to that of the user (Skin_Type, Age) or the products which has been
+    finalised (implicit from from the sql query) you should return those reviews because those reviews might be helpful
+    for the user.
   
   expected_output: >
-    A fully fledged report with the main topics, each with a full section of information.
-    Formatted as markdown without '```'
+    A list of similar user reviews. It should be a list of dict with each dict having the following keys
+
+    Reviewer,
+    Product,
+    Rating,
+    Review,
+    Age,
+    Skin_Type,
+
   
   agent: salesman
+  tools:
+    - user_review_retriever
+
 
 
 get_relevant_products:
   description: >
-    Read a users natural language query for searching products from your shop. Use other agents' help to
-    help people find the right products for them that are available in your shop by providing the accurate
+    Read the user's natural language query
+    ``` 
+    {user_message}
+    ```
+    for searching products from your shop. Use other agents' help to
+    help people find the right products for them, which are available in your shop by providing the accurate
     sqlite3 query which should be used to get the tailored and relevant products.
-  
+    
+    Note: 
+    never ask more than total 2 multi turn questions from a user;
+    read the conversation_history 
+    ```
+    {conversation_history}
+    ```
+
+
+    
   expected_output: >
-    Either a follow up question for the user, if the users' query needs refining (never ask more than total 
-    2 multi turn questions to the user) or a set of these
- 
+    Either a follow up question for the user, if the users' query needs refining  or a set of these
+    
     1. A SQL query to get the relevant products for the user's query
  
     2. A human language like justification (not more than 2-3 lines) of why the selected products are good for the user.
@@ -63,29 +91,32 @@ get_relevant_products:
     If you have asked a follow up question, set the sql query to a value such that it returns zero products
     and the sample products should also be empty array
 
-    The final response should be a valid json file consisting of these four keys
+    I also want to know what tools were used during the whole process of coming to the solution. If you do not know the
+    tools you have used, just return None.
+ 
+    The final response should be a valid json file consisting of these five keys
 
+    tools_used: list[str] | None
     follow_up_question: str | None 
     sql_query: str
     justification: str | None
     sample_products: list[dict[str, Any]]
 
-  
   agent: manager
+  tools:
+    - run_sql_query_on_beauty_products_table
+    - get_product_table_schema
 
 
 cross_verify_output_sql:
   description: >
-    Test the correctness of the final sql query
+    SQLite3 query that you has been finalized needs to be tested once. Test the correctness of the sql query.
+    Its super important that you modify the final sql query by adding LIMIT 1 to it so that it does not result into
+    too large output which becomes impossible to handle. 
   
   expected_output: >
-    The sqlite3 query that you have finalized should be tested once. (make sure to use LIMIT 1) 
-    Use the product retreiver tool by providing the genrated sql query to it (with LIMIT 1) and check
-    if it works or not. If it does not work available you can acess the and check if the finalilzed query is working or not. If not, fix it before
-    sending to the user.
+    Either "SQLIte Query OK" or "SQLite Query BAD" with the error
   
-  agent: manager
-
-
-
-  
+  agent: proofreader
+  tools:
+    - run_sql_query_on_beauty_products_table

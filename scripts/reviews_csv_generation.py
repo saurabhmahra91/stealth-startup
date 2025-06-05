@@ -1,5 +1,6 @@
 # Raw data extracted and parsed manually based on provided text
 import csv
+
 data = [
     [
         "Alina P.",

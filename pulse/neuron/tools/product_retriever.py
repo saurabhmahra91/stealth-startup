@@ -1,11 +1,11 @@
 import json
+import sqlite3
+from pathlib import Path
 
 from crewai.tools import BaseTool
 from pydantic import BaseModel, Field
-from pathlib import Path
-from .config import PRODUCTS_TABLE_NAME
-from .utils import sqlite3_execute
-import sqlite3
+
+from .config import PRODUCTS_TABLE_NAME, PRODUCTS_DB_PATH
 
 
 class ProductRetrieverArgs(BaseModel):
@@ -21,25 +21,22 @@ class RunSQLOnBeautyProductsTable(BaseTool):
 
     inputs: type[BaseModel] = ProductRetrieverArgs
 
-    def __init__(self, db_path: Path, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.table_name = PRODUCTS_TABLE_NAME
-        self.name = f"run_sql_queries_on_table_{self.table_name}"
-        self.db_path = db_path
 
     def _check_table_exists(self) -> bool:
         """
         Raises a ValueError if the specified table does not exist in the database.
         """
-        return _check_table_exists(self.db_path, self.table_name)
+        return _check_table_exists(PRODUCTS_DB_PATH, PRODUCTS_TABLE_NAME)
 
-    def forward(self, query: str) -> str:
+    def _run(self, query: str) -> str:
         assert isinstance(query, str), "SQL query provided is not a string!"
 
         if self._check_table_exists():
-            raise ValueError(f"Table '{self.table_name}' does not exist in the database '{self.db_path}'.")
+            raise ValueError(f"Table '{PRODUCTS_TABLE_NAME}' does not exist in the database '{PRODUCTS_DB_PATH}'.")
 
-        conn: sqlite3.Connection = sqlite3.connect(self.db_path)
+        conn: sqlite3.Connection = sqlite3.connect(PRODUCTS_DB_PATH)
         conn.row_factory = sqlite3.Row
         cur: sqlite3.Cursor = conn.cursor()
         cur.execute(query)

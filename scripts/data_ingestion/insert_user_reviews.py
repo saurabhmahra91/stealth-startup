@@ -16,9 +16,9 @@ CSV columns expected:
     - Review (TEXT)
 """
 
-from pathlib import Path
 import csv
 import sqlite3
+from pathlib import Path
 
 
 def ingest_user_reviews(csv_path: Path, db_path: Path):
@@ -38,12 +38,12 @@ def ingest_user_reviews(csv_path: Path, db_path: Path):
     # Create table (if not exists)
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS user_reviews (
-            Reviewer TEXT,
-            Age TEXT,
-            Skin_Type TEXT,
-            Product TEXT,
-            Rating TEXT,
-            Review TEXT
+            reviewer TEXT,
+            age TEXT,
+            skin_type TEXT,
+            product TEXT,
+            rating TEXT,
+            review TEXT
         )
     """)
 
@@ -64,4 +64,4 @@ def ingest_user_reviews(csv_path: Path, db_path: Path):
 
 if __name__ == "__main__":
     # Example usage:
-    ingest_user_reviews(Path("verified_reviews.csv"), Path("db.sqlite3"))
+    ingest_user_reviews(Path("pulse/neuron/verified_reviews.csv"), Path("db.sqlite3"))

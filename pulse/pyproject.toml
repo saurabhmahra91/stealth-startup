@@ -8,6 +8,7 @@ dependencies = [
     "fastapi[standard]>=0.115.12",
     "neuron",
     "redis>=6.2.0",
+    "sentence-transformers>=4.1.0",
 ]
 
 [tool.uv.sources]

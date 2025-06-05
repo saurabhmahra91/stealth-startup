@@ -1,8 +1,8 @@
 import logging
 import sqlite3
+
 from constants import products_sqlite
 from memory import valkey_client
-
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

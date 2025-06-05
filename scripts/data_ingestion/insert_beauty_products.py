@@ -19,9 +19,9 @@ CSV columns expected:
     - margin (REAL)
 """
 
-from pathlib import Path
 import csv
 import sqlite3
+from pathlib import Path
 
 
 def ingest_beauty_products(csv_path: Path, db_path: Path):
@@ -66,4 +66,4 @@ def ingest_beauty_products(csv_path: Path, db_path: Path):
 
 if __name__ == "__main__":
     # Example usage:
-    ingest_beauty_products(Path("skincare catalog.csv"), Path("db.sqlite3"))
+    ingest_beauty_products(Path("pulse/neuron/skincare catalog.csv"), Path("db.sqlite3"))

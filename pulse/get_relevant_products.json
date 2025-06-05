@@ -1,0 +1,5 @@
+{
+  "sql_query": "SELECT product_id, name, category, description, top_ingredients, tags, usd_price, margin FROM beauty_products WHERE category LIKE '%serum%' AND (description LIKE '%acne%' OR tags LIKE '%acne%') ORDER BY margin DESC LIMIT 0;",
+  "justification": "I have prepared a query to fetch face serums that mention 'acne' either in the description or tags to ensure relevance to the user's acne concern. However, since this is the first user interaction, I am not showing products yet but rather asking a follow-up question to refine the recommendation based on user skin type or ingredient preferences to better tailor the results.",
+  "follow_up_question": "To recommend the most suitable face serums for your acne, could you please tell me if you have any specific skin type (e.g., oily, sensitive) or ingredients you prefer or wish to avoid?"
+}

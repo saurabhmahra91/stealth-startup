@@ -1,13 +1,11 @@
-from fastapi import FastAPI
+import sqlite3
+
+from constants import products_sqlite, products_table
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import sqlite3
-import os
-from pathlib import Path
-
-from search import run_for_user
-from constants import products_sqlite, products_table
 from sanity import log_db_status, test_valkey
+from search import flush_user_memory, run_for_user, user_exists
 
 app = FastAPI()
 log_db_status()
@@ -63,3 +61,11 @@ def fetch_all_products():
     products = [dict(row) for row in rows]
     print(products)
     return {"products": products}
+
+
+@app.post("/flush")
+def flush_memory(user_id: str = Query(..., description="User ID to flush memory for")):
+    if not user_exists(user_id):
+        raise HTTPException(status_code=404, detail="User ID not found")
+    flush_user_memory(user_id)
+    return {"message": f"Memory flushed for user_id: {user_id}"}

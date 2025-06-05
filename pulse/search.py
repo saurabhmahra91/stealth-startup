@@ -1,13 +1,11 @@
+import importlib
 import json
 import os
 import sys
 
 from crewai import CrewOutput
-
 from memory import valkey_client
-
-sys.path.append(os.path.abspath(os.environ["NEURON_PACKAGE_ROOT_DIR"]))
-from neuron.crew import Neuron
+from neuron.crews import Neuron
 
 
 def run_for_user(user_id, user_input):
@@ -16,13 +14,31 @@ def run_for_user(user_id, user_input):
     history.append({"user": user_input})
 
     inputs = {"user_message": user_input, "conversation_history": history}
+
+    neuron = Neuron()
+    crew = neuron.crew()
+
     print("############################")
-    print("This input was sent to the crew \n\n\n\n")
-    print(inputs)
+    print("The agents and their attributes")
+    print([agent.role for agent in crew.agents])
+    print("############################")
+    print("The tasks and their attributes")
+    print([task.description for task in crew.tasks])
 
-    result: CrewOutput = Neuron().crew().kickoff(inputs=inputs)
+    result: CrewOutput = crew.kickoff(inputs=inputs)
 
-    parsed_results = json.loads(result.raw)
+    del crew
+    del neuron
+
+    print("##############################")
+    print("Raw result from the crew ==== \n\n")
+    print(type(result.json))
+    print(result.json)
+
+    if result.json is None:
+        return {"sql_query": "", "justification": "Error", "follow_up": "Error"}
+
+    parsed_results = json.loads(result.json)
 
     justification = parsed_results["justification"]
     sql_query = parsed_results["sql_query"]
