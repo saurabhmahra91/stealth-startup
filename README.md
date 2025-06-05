@@ -10,8 +10,8 @@ PulseNeuro is an intelligent, full-stack beauty product recommendation platform 
 .
 ├── db.sqlite3                # SQLite database with products and reviews
 ├── echo/                    # Frontend (Vite + React)
-├── neuron/                  # Agentic LLM logic using CrewAI
-├── pulse/                   # FastAPI backend
+├── neuron/                  # Agentic LLM logic using CrewAI (deprecated)
+├── pulse/                   # FastAPI backend (includes actual neuron agents)
 ├── scripts/                 # Data ingestion and review CSV generation
 ```
 
@@ -19,7 +19,9 @@ PulseNeuro is an intelligent, full-stack beauty product recommendation platform 
 
 ## 🚀 Quickstart
 
-### 1. Install backend dependencies
+### 🧪 Option 1: Local Dev (Manual)
+
+#### 1. Install backend dependencies
 
 ```bash
 cd pulse
@@ -28,15 +30,14 @@ source .venv/bin/activate
 uv sync
 ```
 
-### 2. Run the backend
+#### 2. Run the backend
 
 ```bash
 cd pulse
 uvicorn main:app --reload
 ```
 
-
-### 3. Install frontend dependencies and start dev server
+#### 3. Install frontend dependencies and start dev server
 
 ```bash
 cd echo
@@ -44,9 +45,9 @@ npm install
 npm run dev
 ```
 
-### 4. Set up the database
+#### 4. Set up the database
 
-Note: This step can be omitted if you already have the db.sqlite3 file
+Note: This step can be omitted if you already have the `db.sqlite3` file
 
 Use the scripts in `scripts/data_ingestion/` to populate the SQLite database.
 
@@ -57,25 +58,43 @@ python insert_user_reviews.py
 
 ---
 
+### 🐳 Option 2: One-Click Docker Compose Setup
+
+Make sure Docker and Docker Compose are installed. Then, run:
+
+```bash
+docker compose up --build
+```
+
+This will start:
+
+- 🧠 Redis (or Valkey)
+- 🔙 FastAPI backend at [http://localhost:8000](http://localhost:8000)
+- 🌐 Vite frontend at [http://localhost:5173](http://localhost:5173)
+
+SQLite is mounted from the host at `./db.sqlite3`.
+
+---
+
 ## 🧠 Neuron Agents
 
-The `neuron/` directory contains autonomous agents orchestrated via [CrewAI](https://docs.crewai.com/). These agents retrieve product data, parse user context, and generate intelligent justifications for recommendations.
+The `pulse/neuron/` directory contains autonomous agents orchestrated via [CrewAI](https://docs.crewai.com/). These agents retrieve product data, parse user context, and generate intelligent justifications for recommendations.
 
 ### Configuration
 
-- `neuron/src/neuron/config/agents.yaml` - Defines agent roles
-- `neuron/src/neuron/config/tasks.yaml` - Task flows
+- `pulse/neuron/config/agents.yaml` – Defines agent roles
+- `pulse/neuron/config/tasks.yaml` – Task flows
 
 Run Neuron independently or as part of the backend:
 
 ```bash
-cd neuron
-python src/neuron/main.py
+cd pulse
+python main.py
 ```
 
 ---
 
-## 💻 Frontend (echo/)
+## 💻 Frontend (`echo/`)
 
 - Built with Vite + React
 - Components live in `src/components/`
@@ -83,10 +102,9 @@ python src/neuron/main.py
 
 ---
 
-
 ## 📦 Scripts
 
-Some script that you most probably dont require.
+Some script that you most probably don’t require.
 
 - `insert_beauty_products.py` — Ingests beauty product data
 - `insert_user_reviews.py` — Loads verified user reviews
@@ -96,37 +114,25 @@ Some script that you most probably dont require.
 
 ## 🔐 Env Files
 
-Make sure you have an .env file in the pulse directory with the following content
+Make sure you have an `.env` file in the `pulse/` directory with the following content:
 
-```bash
-
-## Path to the root directory of the Neuron package
-NEURON_PACKAGE_ROOT_DIR="<parent>/neuron/src"
-
-## Absolute path to the SQLite database storing product info
-PRODUCTS_SQLITE_DATABASE_PATH="<parent>/db.sqlite3"
-
-## Relative path to the products database (used by frontend/backend scripts)
-products_db_path="../db.sqlite3"
-
-## Table name for products
+```env
+NEURON_PACKAGE_ROOT_DIR="../neuron/src"
+PRODUCTS_SQLITE_DATABASE_PATH="../db.sqlite3"
+PRODUCTS_DB_PATH="../db.sqlite3"
 PRODUCTS_TABLE_NAME="beauty_products"
-
-## Relative path to the reviews database (can be same as products DB)
 REVIEWS_DB_PATH="../db.sqlite3"
-
-## Table name for storing user reviews
 REVIEWS_TABLE_NAME="user_reviews"
-
-## Model name for LLM (used in backend tasks or agents)
 MODEL=gpt-4o-mini
-
-## OpenAI API key for accessing GPT models (keep this secret!)
 OPENAI_API_KEY=sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+REDIS_URL=redis://redis:6379
 ```
 
+In `echo/.env`:
 
-- `google.env` and `openai.env` store respective API keys (ignored in git)
+```env
+VITE_API_URL="http://localhost:8000"
+```
 
 ---
 
