@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./pulse
+    container_name: pulse-backend
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - ./pulse:/app
+      - ./db.sqlite3:/app/db.sqlite3
+    ports:
+      - "8000:8000"
+    environment:
+      PRODUCTS_SQLITE_DATABASE_PATH: /app/db.sqlite3
+      PRODUCTS_DB_PATH: /app/db.sqlite3
+      REVIEWS_DB_PATH: /app/db.sqlite3
+      PRODUCTS_TABLE_NAME: beauty_products
+      REVIEWS_TABLE_NAME: user_reviews
+      MODEL: gpt-4.1-mini
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      REDIS_URL: redis://redis:6379
+
+    depends_on:
+      - redis
+
+  frontend:
+    build:
+      context: ./echo
+      dockerfile: Dockerfile
+    container_name: echo-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_APP_URL=${VITE_APP_URL}
+    volumes:
+      - ./echo:/app
+    command: npm run dev
+    depends_on:
+      - backend
