@@ -3,9 +3,9 @@ import SearchBar from '../components/SearchBar'
 import ProductList from '../components/ProductList'
 import JustificationFooter from '../components/JustificationFooter'
 
-const API_URL = import.meta.env.VITE_API_URL;
 console.log("vite meta env = ", import.meta.env)
-console.log("backend api base = ", API_URL)
+console.log("vite app url = ", import.meta.env.VITE_API_URL)
+
 // const API_URL = 'http://localhost:8000' // Ensure this matches your backend
 
 export default function HomePage() {
@@ -24,7 +24,7 @@ export default function HomePage() {
 
     const handleSearch = async (query) => {
         setLoading(true)
-        const res = await fetch(`${API_URL}/query`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/query`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_id: userId, user_input: query }),
@@ -37,7 +37,7 @@ export default function HomePage() {
     }
 
     const handleFlush = async () => {
-        await fetch(`${API_URL}/flush?user_id=${userId}`, { method: 'POST' })
+        await fetch(`${import.meta.env.VITE_API_URL}/flush?user_id=${userId}`, { method: 'POST' })
         setProducts([])
         setJustification('')
         setFollowUp('')
