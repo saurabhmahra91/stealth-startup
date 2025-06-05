@@ -2747,6 +2747,7 @@ name = "pulse"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "crewai", extra = ["tools"] },
     { name = "fastapi", extra = ["standard"] },
     { name = "neuron" },
     { name = "redis" },
@@ -2755,6 +2756,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "crewai", extras = ["tools"], specifier = ">=0.121.1" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.115.12" },
     { name = "neuron", directory = "../neuron" },
     { name = "redis", specifier = ">=6.2.0" },
