@@ -4,6 +4,7 @@ import ProductList from '../components/ProductList'
 import JustificationFooter from '../components/JustificationFooter'
 
 const API_URL = import.meta.env.VITE_API_URL;
+console.log("backend api base = ", API_URL)
 // const API_URL = 'http://localhost:8000' // Ensure this matches your backend
 
 export default function HomePage() {
