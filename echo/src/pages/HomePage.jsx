@@ -3,7 +3,7 @@ import SearchBar from '../components/SearchBar'
 import ProductList from '../components/ProductList'
 import JustificationFooter from '../components/JustificationFooter'
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 // const API_URL = 'http://localhost:8000' // Ensure this matches your backend
 
 export default function HomePage() {
@@ -45,10 +45,9 @@ export default function HomePage() {
         <div className="home-page">
             <SearchBar onSearch={handleSearch} onFlush={handleFlush} />
             <ProductList products={products} />
-            {loading ? (
-                <div className="footer-loader">Loading...</div>
-            ) : (justification || followUp) && (
+            {(loading || justification || followUp) && (
                 <JustificationFooter
+                    loading={loading}
                     justification={justification}
                     followUp={followUp}
                 />

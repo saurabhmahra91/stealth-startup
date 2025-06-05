@@ -1,9 +1,14 @@
-// JustificationFooter.jsx (example)
-export default function JustificationFooter({ justification, followUp }) {
+export default function JustificationFooter({ justification, followUp, loading }) {
     return (
         <footer className="justification-footer">
-            Follow Up: {followUp && <p>{followUp}</p>}
-            Justification: {justification && <p>{justification}</p>}
+            {loading ? (
+                <p className="footer-loader">Loading...</p>
+            ) : (
+                <>
+                    {followUp && <p>Follow Up: {followUp}</p>}
+                    {justification && <p>Justification: {justification}</p>}
+                </>
+            )}
         </footer>
     )
 }
