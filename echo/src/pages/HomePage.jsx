@@ -3,7 +3,8 @@ import SearchBar from '../components/SearchBar'
 import ProductList from '../components/ProductList'
 import JustificationFooter from '../components/JustificationFooter'
 
-const API_URL = 'http://localhost:8000' // Ensure this matches your backend
+const apiUrl = process.env.REACT_APP_API_URL;
+// const API_URL = 'http://localhost:8000' // Ensure this matches your backend
 
 export default function HomePage() {
     const [products, setProducts] = useState([])
@@ -32,8 +33,6 @@ export default function HomePage() {
         setFollowUp(data.follow_up)
         setLoading(false)
     }
-
-
 
     const handleFlush = async () => {
         await fetch(`${API_URL}/flush?user_id=${userId}`, { method: 'POST' })
