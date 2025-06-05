@@ -20,14 +20,14 @@ class Neuron:
     def agent_manager(self) -> Agent:
         return manager
 
-    def agent_product_matcher(self) -> Agent:
-        return product_matcher
+    # def agent_product_matcher(self) -> Agent:
+    #     return product_matcher
 
-    def agent_proofreader(self) -> Agent:
-        return proofreader
+    # def agent_proofreader(self) -> Agent:
+    #     return proofreader
 
-    def agent_salesman(self) -> Agent:
-        return salesman
+    # def agent_salesman(self) -> Agent:
+    #     return salesman
 
     def task_get_relevant_products(self) -> Task:
         return get_relevant_products
@@ -48,9 +48,9 @@ class Neuron:
         return Crew(
             agents=[
                 self.agent_manager(),
-                self.agent_product_matcher(),
-                self.agent_proofreader(),
-                self.agent_salesman(),
+                # self.agent_product_matcher(),
+                # self.agent_proofreader(),
+                # self.agent_salesman(),
             ],
             tasks=[
                 self.task_prepare_sql(),

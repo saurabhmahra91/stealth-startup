@@ -1,6 +1,6 @@
 from crewai import Task
 
-from ..agents.salesman import salesman
+from ..agents.manager import manager
 from ..tools.user_review_retriever import SemanticUserReviewRetriever
 from ..tools.user_review_schema_retriever import GetUserReviewsTableSchema
 
@@ -12,7 +12,7 @@ find_similar_user_reviews = Task(
     expected_output="""
         List of similar user reviews as dicts with keys: product, rating, review, age, skin_type
     """,
-    agent=salesman,
+    agent=manager,
     tools=[SemanticUserReviewRetriever(), GetUserReviewsTableSchema()],
     output_file="find_similar_user_reviews.md",
 )

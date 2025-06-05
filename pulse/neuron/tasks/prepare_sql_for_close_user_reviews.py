@@ -1,6 +1,6 @@
 from crewai import Task
 
-from ..agents.salesman import salesman
+from ..agents.manager import manager
 from ..tools.user_review_schema_retriever import GetUserReviewsTableSchema
 from ..tools.user_review_retriever import SemanticUserReviewRetriever
 
@@ -12,7 +12,7 @@ prepare_sql_for_close_user_reviews = Task(
         5. Generate the final SQL query which can be used to query user_reviews table.
     """,
     expected_output="""a valid SQLite3 query for fetching rows from the user_reviews table""",
-    agent=salesman,
+    agent=manager,
     tools=[
         GetUserReviewsTableSchema(),
         SemanticUserReviewRetriever()
