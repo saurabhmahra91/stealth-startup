@@ -1,4 +1,4 @@
-# 🧠 PulseNeuro: AI-Powered Product Discovery System
+# 🧠 AI-Powered Product Discovery System
 
 PulseNeuro is an intelligent, full-stack beauty product recommendation platform that combines LLM agentic workflows (`neuron/`), a FastAPI backend (`pulse/`), a Vite + React frontend (`echo/`), and a SQLite3 database (`db.sqlite3`). It’s built for fast experimentation, user interaction, and AI-enhanced product reasoning.
 
