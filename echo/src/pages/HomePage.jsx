@@ -56,7 +56,7 @@ export default function HomePage() {
         } catch (error) {
             console.error('Search failed:', error)
             setJustification('')
-            setFollowup('Failed request. Can you please try with a fresh session.')
+            setFollowUp('Failed request. Can you please try with a fresh session.')
         } finally {
             setLoading(false)
         }
