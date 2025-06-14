@@ -1,8 +1,11 @@
 body {
-    font-family: sans-serif;
+    font-family: "Space Grotesk", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
     margin: 0;
     padding: 20px;
     background: #f9f9f9;
+    padding-bottom: 300px;
 }
 
 .search-bar {
@@ -62,18 +65,19 @@ body {
 
 
 .justification-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: white;
-  padding: 1rem 2rem;
-  box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
-  z-index: 1000;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
 }
 
 .home-page {
-  padding-bottom: 80px; /* leave space for footer */
+    padding-bottom: 80px;
+    /* leave space for footer */
 }
 
 .footer-loader {

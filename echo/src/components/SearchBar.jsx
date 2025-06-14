@@ -1,4 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import TrashIcon from '../assets/icons/Trash';
+import SendIcon from '../assets/icons/Send';
+
+import './SearchBar.css'
 
 export default function SearchBar({ onSearch, onFlush }) {
     const [query, setQuery] = useState('')
@@ -12,19 +16,22 @@ export default function SearchBar({ onSearch, onFlush }) {
     }
 
     return (
-        <div className="search-bar">
-            <form onSubmit={handleSubmit}>
+        <div className="search-container">
+            <form onSubmit={handleSubmit} className="search-form">
                 <input
                     type="text"
-                    placeholder="Search for a product..."
+                    className="search-input"
+                    placeholder="What are you looking for?"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                 />
-                <button type="submit">Search</button>
-                <button type="button" onClick={onFlush} style={{ marginLeft: '10px' }}>
-                    Flush Session
+                <button type="submit" className="send-button">
+                    <SendIcon></SendIcon>
                 </button>
             </form>
+            <button className="flush-button" onClick={onFlush}>
+                <TrashIcon></TrashIcon>
+            </button>
         </div>
     )
 }
